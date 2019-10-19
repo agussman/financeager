@@ -1,5 +1,6 @@
 """Webservice resources as end points of financeager REST API."""
 import json
+import sys
 
 import flask
 from flask_restful import Resource, reqparse
@@ -120,3 +121,10 @@ class CopyResource(LogResource):
     def post(self):
         args = copy_parser.parse_args()
         return self.run_safely("copy", error_code=404, **args)
+
+
+class VersionResource(Resource):
+    def get(self):
+        args = json.loads(flask.request.json or "{}")
+        val = {'version': sys.modules["financeager"].__version__}
+        return val
